@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XueRui Chan | High-Performance Server</title>
+    <style>
+        /* 基础变量定义 */
+        :root {
+            --bg-color: #0b0f19;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8;
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --card-border: rgba(255, 255, 255, 0.08);
+        }
+
+        /* 全局重置与基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.04), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.04), transparent 25%);
+        }
+
+        /* 动画关键帧 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* 页面容器 */
+        .container {
+            max-width: 1000px;
+            width: 90%;
+            padding: 80px 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        /* 顶部欢迎区 (Hero Section) */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .server-status {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .author {
+            color: var(--accent-color);
+            font-weight: 400;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 核心特性网格区 (Feature Cards) */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 32px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: var(--accent-color);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* 底部互动区 */
+        .api-test {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(145deg, rgba(30,41,59,0.5) 0%, rgba(15,23,42,0.5) 100%);
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+        }
+
+        .api-test p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: 1px solid var(--text-secondary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--text-primary);
+            color: var(--bg-color);
+            border-color: var(--text-primary);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="server-status">
+                <div class="status-dot"></div>
+                SYSTEM ONLINE
+            </div>
+            <h1>Engineered by <span class="author">XueRui Chan</span></h1>
+            <p class="subtitle">A High-Performance Web Server built from scratch in modern C++11, powered by the Reactor EventLoop architecture.</p>
+        </header>
+
+        <div class="features">
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Epoll EventLoop</h3>
+                <p>底层采用 Linux Epoll I/O 多路复用技术与非阻塞 Socket，主线程极限专注于事件分发，轻松应对海量高并发连接。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <h3>Thread Pool</h3>
+                <p>自研基于条件变量与互斥锁的线程池，实现工作线程与网络层彻底解耦，榨干多核 CPU 计算性能。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🔀</div>
+                <h3>Dynamic Router</h3>
+                <p>面向对象的 HTTP 解析器配合 Lambda 闭包路由系统，支持静态文件回源与动态 RESTful API 的优雅挂载。</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h3>Async Logger</h3>
+                <p>独立的后台监控线程与阻塞队列，实现业务逻辑与磁盘 I/O 零冲突，精准捕捉每一条运行轨迹与异常告警。</p>
+            </div>
+        </div>
+
+        <div class="api-test">
+            <h3>Experience the Dynamic API</h3>
+            <p>Try fetching real-time JSON data generated by the C++ backend.</p>
+            <a href="/api/ping" target="_blank" class="btn">Send /api/ping</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 XueRui Chan. All rights reserved. <br>
+        Powered by C++11 | Epoll | ThreadPool
+    </footer>
+
+</body>
+</html>
